@@ -6,7 +6,7 @@ from pymysql.cursors import DictCursor
 
 
 app = Flask(__name__)
-	
+
 @app.route('/', methods=['POST'])
 def login():
 	data = request.get_data()
@@ -29,6 +29,10 @@ def login():
 		return db_data
 	else:
 		return 'NOT OK'
+
+@app.route('/voting_load', methods=['GET'])
+def load():
+	pass
 
 @app.route('/reg', methods=['POST'])
 def register():

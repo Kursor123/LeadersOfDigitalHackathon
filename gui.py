@@ -67,8 +67,7 @@ def back(email, pw, fn, ln, rf):
 	login_form()
 
 def load_voting_data():
-	pass#req = requests.post('http://localhost:5000/reg', data={'username':email, 'password':password, 'firstname':firstname, 'lastname':lastname})
-
+	req = requests.get('http://localhost:5000/voting_load')
 
 def home_page_form():
 	home_page_frame = Frame(root)
@@ -77,7 +76,6 @@ def home_page_form():
 	listbox.pack(side=LEFT)
 	voting_frame = Frame(home_page_frame, width=512, height=256, bg='black')
 	voting_frame.pack(side=LEFT)
-
 
 def register_form(login_frame):
 	login_frame.destroy()
