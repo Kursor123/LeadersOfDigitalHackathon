@@ -12,9 +12,8 @@ def sing_in(email, password, lf):
 		error.pack(pady=15)
 	else:
 		data = ast.literal_eval(req.text)
-		print(data, type(data))
 		lf.destroy()
-		home_page_form()
+		home_page_form(data)
 
 def register(email, pw, fn, ln, rf):
 	email = email.get()
@@ -66,14 +65,47 @@ def back(email, pw, fn, ln, rf):
 	rf.destroy()
 	login_form()
 
-def load_voting_data():
-	req = requests.get('http://localhost:5000/voting_load')
+def send_survey_wrapper(func, entry, theme):
+	def wrapper():
+		return func(entry, theme)
+	return wrapper
 
-def home_page_form():
+def send_survey(entry, theme):
+	temp = []
+	for el in entry:
+		temp.append(el.get())
+	req = requests.post('http://localhost:5000/voting_load', data={'theme':theme.get(), 'entry':temp})
+
+	
+
+def create_survey_form():
+	def generate_entry(var):
+		for _ in range(int(var)):
+			temp = Entry(survey, width=25)
+			temp.pack()
+			entry.append(temp)
+		create = Button(survey, text='Создать', command=send_survey_wrapper(send_survey, entry, theme))
+		create.pack()
+
+	tkvar = IntVar(0)
+	choices = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+	survey = Toplevel(root)
+	theme = Entry(survey, width=25)
+	theme.pack()
+	entry = []
+	popupMenu = OptionMenu(survey, tkvar, *choices, command=generate_entry)
+	popupMenu.pack()
+
+def home_page_form(data):
+	user_data = data
 	home_page_frame = Frame(root)
 	home_page_frame.pack()
-	listbox = Listbox(home_page_frame, width=32, height=256, bg='red')
-	listbox.pack(side=LEFT)
+	home_page_left_frame = Frame(home_page_frame)
+	home_page_left_frame.pack(side=LEFT)
+	create_survey = Button(home_page_left_frame, text='Создать форму голосования', command=create_survey_form)
+	create_survey.pack()
+	listbox = Listbox(home_page_left_frame, width=32, height=256, bg='red')
+	listbox.pack()
 	voting_frame = Frame(home_page_frame, width=512, height=256, bg='black')
 	voting_frame.pack(side=LEFT)
 

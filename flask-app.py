@@ -30,9 +30,12 @@ def login():
 	else:
 		return 'NOT OK'
 
-@app.route('/voting_load', methods=['GET'])
+@app.route('/voting_load', methods=['POST'])
 def load():
-	pass
+	data = request.get_data()
+	data = data.decode('UTF-8').split('&')
+	print(data)
+	return 'OK'
 
 @app.route('/reg', methods=['POST'])
 def register():
